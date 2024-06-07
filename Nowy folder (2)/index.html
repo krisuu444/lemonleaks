@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LemonSearch - Best Search</title>
+    <!-- Importowanie czcionki z Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-image: url('background.jpg'); /* Ścieżka do obrazu tła */
+            background-size: cover; /* Dopasowanie obrazu do rozmiaru okna */
+            background-position: center; /* Wyśrodkowanie obrazu */
+            background-repeat: no-repeat; /* Brak powtarzania obrazu */
+            height: 100vh; /* Gwarantuje, że tło zajmuje całą wysokość okna przeglądarki */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        header {
+            position: absolute;
+            top: 20px;
+            font-family: 'Pacifico', cursive; /* Użycie importowanej czcionki */
+            font-size: 48px; /* Zwiększony rozmiar czcionki */
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Cień tekstu dla lepszej widoczności */
+        }
+        #container {
+        background-color: rgba(255, 255, 255, 0.8); /* Białe tło z przezroczystością */
+        padding: 20px; /* Zmniejszenie wypełnienia */
+        border-radius: 20px; /* Większe zaokrąglenie */
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in-out; /* Prosta animacja */
+        width: 70%; /* Szerokość kontenera */
+        max-width: 400px; /* Maksymalna szerokość kontenera */
+        height: auto; /* Automatyczna wysokość */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+}
+
+
+
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        #content {
+            display: none;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Białe tło z przezroczystością */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .error {
+            color: red;
+        }
+        .discord-link {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #5865F2; /* Kolor linku Discord */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .discord-link:hover {
+            text-decoration: underline;
+        }
+        .player-ip {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+        /* Stylizacja przycisków */
+        .custom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .custom-button:hover {
+            background-color: #333;
+        }
+        /* Stylizacja pola tekstowego */
+        #licenseCode {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>Lemon Leaks</header>
+    <div id="container">
+        <h1 style="color: black; font-weight: bold;">Key</h1>
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="licenseCode" placeholder="Example: KLjk4%3$Oda9P34">
+        </div>
+        <button class="custom-button" onclick="checkLicense()">Login</button>
+        <p id="message" class="error"></p>
+        <a href="https://discord.gg/lemonnet" class="discord-link">Discord</a>
+        <div id="content">
+            <h2>Treść chroniona</h2>
+            <p>To jest chroniona treść dostępna po wpisaniu prawidłowego kodu licencyjnego.</p>
+            <h3>Sprawdź IP gracza</h3>
+            <input type="text" id="playerNick" placeholder="Wpisz nick gracza">
+            <button class="custom-button" onclick="findPlayerIP()">Znajdź IP</button>
+            <p id="playerIP" class="player-ip"></p>
+        </div>
+    </div>
+    <script>
+        const players = {
+            'diaxower': '94.254.184.9',
+            'fisterx': '149.156.124.2',
+            '000igor': '185.254.7.15',
+            '27josh102': '79.185.30.82',
+            'buszz': '83.31.171.93',
+            '27john102': '213.134.170.145',
+            'pokojowy': '109.231.30.119',
+            'boczeeek': '188.122.23.87',
+            'qushee_': '176.58.18.74',
+            'foregin': '193.192.177.131',
+            '_zekaru': '188.146.74.106',
+            'ake_88': '78.30.67.77',
+            'foxiback': '83.8.1.28',
+            'avyni': '89.64.77.230',
+            'lumzi': '193.242.212.200',
+            'gajka': '83.20.249.136',
+            'spoconywiktor12': '46.205.208.64',
+            'dawidbalas': '78.30.65.228',
+            'tymosuper': '185.152.123.134',
+            'livekus': '78.11.180.138',
+             '_shiginima': '5.184.123.173',
+            '77ashh': '176.221.122.208',
+            'bu3us': '5.173.72.34',
+            'eronix_': '91.150.178.217',
+            'maasterek': '185.122.175.161',
+            'snavsk': '89.64.45.49',
+            'pan_poziomka': '37.30.16.29',
+            'krzysix1': '77.65.104.136',
+            'bumbirek': '31.61.171.136',
+            'sajgonek27': '89.64.28.184',
+            'xgruzik': '37.47.133.167',
+            'jestem_hardkore': '89.64.109.56',
+            'zreeshey': '91.192.199.17',
+            'chippys5': '217.96.44.86',
+            'xeuvk': '89.72.13.217',
+            'oriom55': '94.254.174.25',
+            'konfok': '91.231.168.188',
+            'aleks1211': '80.238.119.42',
+            'mareczek_xd': '79.191.150.109',
+            'donanek1': '188.47.44.73',
+            'uhcjez': '89.64.3.160',
+};
+
+    function checkLicense() {
+            const correctCode = '12345'; // Tutaj wpisz poprawny kod licencyjny
+            const userCode = document.getElementById('licenseCode').value;
+            const messageElement = document.getElementById('message');
+            const contentElement = document.getElementById('content');
+
+            if (userCode.trim() === correctCode) {
+                messageElement.textContent = 'Kod poprawny!';
+                messageElement.style.color = 'green';
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                    messageElement.style.color = 'initial';
+                }, 1000);
+                contentElement.style.display = 'block'; // Pokaż treść chronioną
+            } else {
+                messageElement.textContent = 'Niepoprawny kod licencyjny.';
+                contentElement.style.display = 'none';
+            }
+        }
+
+        function findPlayerIP() {
+            const playerNick = document.getElementById('playerNick').value.toLowerCase().trim();
+            const playerIPElement = document.getElementById('playerIP');
+
+            if (players[playerNick]) {
+                playerIPElement.textContent = `IP gracza ${playerNick}: ${players[playerNick]}`;
+                playerIPElement.style.color = 'green';
+            } else {
+                playerIPElement.textContent = 'Gracz nie znaleziony.';
+                playerIPElement.style.color = 'red';
+            }
+        }
+    </script>
+</body>
+</html>
